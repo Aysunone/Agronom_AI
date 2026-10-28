@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="az">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0f4d2e">
+    <meta name="description" content="AgroLab AI — fermerlər üçün heyvan sağlamlığı və qulluq üzrə AI köməkçisi.">
+    <title>AgroLab AI — Heyvan sağlamlığı köməkçisi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="wrap">
+        <header class="topbar">
+            <div class="logo" aria-hidden="true">🐄</div>
+            <div class="brand">
+                <b>AgroLab AI</b>
+                <span>Fermerlər üçün ağıllı köməkçi</span>
+            </div>
+            <span class="header-note">Heyvan sağlamlığı</span>
+        </header>
+
+        <main class="grid">
+            <section class="card hero" aria-labelledby="title">
+                <span class="eyebrow">AGROLAB • AI ASSISTANT</span>
+                <h1 id="title">Heyvanın vəziyyətini qiymətləndir</h1>
+                <p class="lead">
+                    Heyvan haqqında məlumatları daxil et, şəkil yüklə və
+                    mümkün sağlamlıq əlamətləri barədə ilkin məlumat al.
+                </p>
+
+                <form id="analysis-form">
+                    <label for="type">Heyvan növü</label>
+                    <select id="type" name="type" required>
+                        <option value="İnək">İnək</option>
+                        <option value="Qoyun">Qoyun</option>
+                        <option value="Keçi">Keçi</option>
+                        <option value="At">At</option>
+                        <option value="Camış">Camış</option>
+                    </select>
+
+                    <div class="two">
+                        <div>
+                            <label for="weight">Çəki (kq, təxmini)</label>
+                            <input id="weight" type="number" min="1" max="3000" step="0.1" placeholder="Məsələn, 500">
+                        </div>
+                        <div>
+                            <label for="milk">Gündəlik süd (litr)</label>
+                            <input id="milk" type="number" min="0" max="150" step="0.1"
+                                placeholder="Məlum deyilsə boş saxla">
+                        </div>
+                    </div>
+
+                    <label for="symptoms">Əlamətlər (istəyə bağlı)</label>
+                    <textarea id="symptoms" maxlength="1500" rows="3"
+                        placeholder="Məsələn: iştahı azalıb, öskürür, ayağını axsayır..."></textarea>
+
+                    <label for="photo">Heyvanın şəkli</label>
+                    <label class="drop" id="drop" for="photo">
+                        <span class="upload-icon" aria-hidden="true">＋</span>
+                        <strong id="drop-title">Şəkil seç və ya bura sürüşdür</strong>
+                        <span class="upload-hint">JPG, PNG və ya WEBP · maksimum 5 MB</span>
+                        <img id="preview" alt="Seçilmiş heyvanın şəkli" hidden>
+                        <input id="photo" type="file" accept="image/jpeg,image/png,image/webp">
+                    </label>
+
+                    <button class="btn" id="analyze-btn" type="submit">
+                        Şəkli analiz et
+                    </button>
+
+                    <p class="err" id="error" role="alert" hidden></p>
+                    <p class="privacy-note">
+                        Şəkil analiz üçün AI xidmətinə göndərilir. Şəxsi məlumatları
+                        və insanları göstərən şəkilləri yükləmə.
+                    </p>
+                </form>
+            </section>
+
+            <div class="col">
+                <section class="card" id="result" aria-labelledby="result-title" aria-live="polite">
+                    <span class="eyebrow">ANALİZ HESABATI</span>
+                    <h2 id="result-title">Nəticə</h2>
+                    <p class="empty">
+                        Heyvanın şəklini seçdikdən sonra analizə başla.
+                        Mümkün əlamətlər və növbəti addımlar burada görünəcək.
+                    </p>
+                </section>
+
+                <section class="card chat-card" aria-labelledby="chat-title">
+                    <span class="eyebrow">AGROLAB ASSISTANT</span>
+                    <h2 id="chat-title">Baytar köməkçisinə sual ver</h2>
+                    <p class="lead small-lead">
+                        Heyvanların sağlamlığı, qidalanması və gündəlik qulluq barədə soruş.
+                    </p>
+
+                    <div class="chips" id="chips">
+                        <button class="chip" type="button" data-question="Nə vaxt baytar çağırmalıyam?">
+                            Nə vaxt baytar çağırım?
+                        </button>
+                        <button class="chip" type="button" data-question="Xəstə heyvanı necə ayırmalıyam?">
+                            Xəstə heyvanın ayrılması
+                        </button>
+                        <button class="chip" type="button" data-question="Heyvan üçün təmiz su və yem niyə vacibdir?">
+                            Yem və su
+                        </button>
+                    </div>
+
+                    <div class="msgs" id="messages" aria-live="polite" aria-relevant="additions">
+                        <div class="m assistant-message">
+                            Salam! Mən AgroLab AI köməkçisiyəm. Heyvan haqqında sualını yaz.
+                            Ciddi simptomlarda baytarın müayinəsi vacibdir.
+                        </div>
+                    </div>
+
+                    <form class="send" id="chat-form">
+                        <label class="sr-only" for="question">Sualın</label>
+                        <textarea id="question" rows="2" maxlength="2000" placeholder="Sualını yaz..."
+                            required></textarea>
+                        <button id="send-btn" type="submit">Göndər</button>
+                    </form>
+                    <p class="privacy-note">AI cavabları ümumi məlumatdır, baytar müayinəsini əvəz etmir.</p>
+                </section>
+            </div>
+        </main>
+
+        <footer>
+            <b>AgroLab AI</b>
+            <span>İlkin məlumat və maarifləndirmə üçün hazırlanıb.</span>
+            <span>© 2026 AgroLab AI</span>
+        </footer>
+    </div>
+</body>
+
+</html>
