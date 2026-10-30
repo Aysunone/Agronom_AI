@@ -34,9 +34,14 @@ if (process.env.TRUST_PROXY) {
 
 app.disable("x-powered-by");
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: "same-origin" }
+  crossOriginResourcePolicy: { policy: "same-origin" },
+  contentSecurityPolicy: {
+    directives: {
+      ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+      "img-src": ["'self'", "data:", "blob:"]
+    }
+  }
 }));
-
 app.use(express.json({ limit: "7mb" }));
 
 const apiLimiter = rateLimit({
